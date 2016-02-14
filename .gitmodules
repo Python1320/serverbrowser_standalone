@@ -1,0 +1,6 @@
+[submodule "serverquery"]
+	path = serverquery
+	url = git@github.com:Python1320/serverquery.git
+[submodule "lualibs/vstruct"]
+	path = lualibs/vstruct
+	url = https://github.com/ToxicFrog/vstruct.git
