@@ -1,4 +1,5 @@
 
+
 require"util"
 
 
@@ -59,10 +60,10 @@ function main()
 		wx.wxLC_REPORT + wx.wxLC_SINGLE_SEL + wx.wxLC_HRULES + wx.wxLC_VRULES)
   
 	listCtrl:InsertColumn(0, "Name", wx.wxLIST_FORMAT_LEFT, -1)
-    listCtrl:InsertColumn(1, "Ping", wx.wxLIST_FORMAT_LEFT, -1)
+    listCtrl:InsertColumn(1, "Ping (ms)", wx.wxLIST_FORMAT_LEFT, -1)
 
-    listCtrl:SetColumnWidth(0, 500)
-    listCtrl:SetColumnWidth(1, 60)
+    listCtrl:SetColumnWidth(0, 480)
+    listCtrl:SetColumnWidth(1, 70)
 										
 	think_hook = wx.wxTimer(frame)   
 	
@@ -86,7 +87,7 @@ local function server_reply(what,entry,x)
 	end
 	if what == true then
 		
-		local item = add(tostring(entry.name),math.ceil((entry[4] or -1)*1000))
+		local item = add(tostring(entry.name),not entry.ping and -1 or math.ceil(entry.ping*1000))
 		Msg"."
 		--Msg"[Server Reply] " print(math.ceil((entry[4] or -1)*1000),entry.name)
 	elseif what == false then
@@ -95,9 +96,10 @@ local function server_reply(what,entry,x)
 			refreshing = false
 			wantstop = true
 			
-			print"Search: Stopped"
+			print"\nSearch: Finished"
+      return
 		end
-		Msg"[Server Info] Fail "print(entry,x)
+		Msg"[Server Info] Got failure: "print(entry,x)
 		return
 	end
 
@@ -121,7 +123,7 @@ OnThink = function()
 	
 	if true and first then 
 			first =false  
-			serverquery.getServerList(cb, [[\gamedir\garrysmod\empty\1\secure\0]])
+			serverquery.getServerList(cb, [[\gamedir\garrysmod\empty\1]])
 			--print"first!"
 	end
 	
